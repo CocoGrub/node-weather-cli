@@ -1,13 +1,28 @@
 #!usr/bin/env node
 import { argsLogger } from "./helpers/arguments.js";
 import { logError, printSucces, printHelp } from "./services/log.service.js";
-import { writeKey } from "./services/os.js";
+import {
+  writeKey,
+  getKey,
+  TOKEN_DICTIONARY,
+} from "./services/storage.service.js";
+import { getWeather } from "./services/api.service.js";
 
 const saveToken = async (token) => {
+  if (!token.length) {
+    const key = await getKey(); // если передана пустая строка, но токен в файле есть, то ...
+    if (key) {
+      printSucces(key);
+      return;
+    }
+    logError("не передан токен");
+    return;
+  }
   try {
-    await writeKey("token", token);
+    await writeKey(TOKEN_DICTIONARY.token, token);
+    printSucces("токен сохранен");
   } catch (error) {
-    logError( error);
+    logError(error);
   }
 };
 
@@ -23,6 +38,7 @@ async function main() {
   if (args.t) {
     return saveToken(args.t);
   }
+  getWeather("moscow");
 }
 
 main();
