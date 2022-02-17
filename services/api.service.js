@@ -1,14 +1,15 @@
-import https from "https";
-import { TOKEN_DICTIONARY, getKey } from "./storage.service.js";
 import axios from "axios";
+import { getKey } from "./storage.service.js";
 
-const getWeather = async (city) => {
-  const token = await getKey();
-  if (!token) {
+const getWeather = async () => {
+  const { token, city } = await getKey();
+
+  console.log(token, city);
+  if (!(token && city)) {
     return false;
   }
 
-  const {data} = await axios.get(
+  const { data } = await axios.get(
     "https://api.openweathermap.org/data/2.5/weather",
     {
       params: {
@@ -19,7 +20,7 @@ const getWeather = async (city) => {
       },
     }
   );
-    console.log(data);
+  console.log(data);
 
   return data;
 };

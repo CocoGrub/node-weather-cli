@@ -8,37 +8,56 @@ import {
 } from "./services/storage.service.js";
 import { getWeather } from "./services/api.service.js";
 
-const saveToken = async (token) => {
-  if (!token.length) {
-    const key = await getKey(); // если передана пустая строка, но токен в файле есть, то ...
+const saveData = async (type, data) => {
+  console.log(data, "key");
+  if (!data.length) {
+    const key = await getKey(type); // если передана пустая строка, но токен в файле есть, то ...
+
     if (key) {
       printSucces(key);
+
       return;
     }
+
     logError("не передан токен");
     return;
   }
+
   try {
-    await writeKey(TOKEN_DICTIONARY.token, token);
+    await writeKey(TOKEN_DICTIONARY[type], data);
     printSucces("токен сохранен");
   } catch (error) {
     logError(error);
   }
 };
 
+const foreCast = async () => {
+  try {
+    const weather = await getWeather();
+    console.log(weather, "weather");
+  } catch (error) {
+    if (error?.response?.status === 404) logError("укажите верный город");
+    if (error?.response?.status === 401) logError("неверно указан токен");
+    else logError(error);
+  }
+};
+
 async function main() {
-  console.log(argsLogger(process.argv));
   const args = argsLogger(process.argv);
+
   if (args.h) {
     printHelp();
   }
   if (args.s) {
     printSucces();
   }
-  if (args.t) {
-    return saveToken(args.t);
+  if (args.c) {
+    return saveData(TOKEN_DICTIONARY.city, args.c);
   }
-  getWeather("moscow");
+  if (args.t) {
+    return saveData(TOKEN_DICTIONARY.token, args.t);
+  }
+  await foreCast();
 }
 
 main();

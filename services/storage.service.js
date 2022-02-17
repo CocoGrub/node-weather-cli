@@ -1,14 +1,5 @@
 import { homedir } from "os";
-import {
-  basename,
-  dirname,
-  extname,
-  join,
-  relative,
-  isAbsolute,
-  resolve,
-  sep,
-} from "path";
+import { join } from "path";
 import { promises } from "fs";
 
 const TOKEN_DICTIONARY = {
@@ -18,13 +9,12 @@ const TOKEN_DICTIONARY = {
 
 const filePath = join(homedir(), "weather.data.json");
 
-const writeKey = async (key, value) => {
+const writeKey = async (type, value) => {
   if (await isExist()) {
-    await getKey(key);
+    await getKey();
   }
-
-  const data = {};
-  data[key] = value;
+  const data = await getKey();
+  data[type] = value;
   await promises.writeFile(filePath, JSON.stringify(data));
 };
 
@@ -32,7 +22,7 @@ const getKey = async () => {
   try {
     const data = await promises.readFile(filePath);
     const obj = await JSON.parse(data);
-    return obj.token;
+    return obj;
   } catch (error) {
     return false;
   }
