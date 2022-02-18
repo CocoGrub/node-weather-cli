@@ -1,6 +1,7 @@
 import { homedir } from "os";
 import { join } from "path";
 import { promises } from "fs";
+import axios from "axios";
 
 const TOKEN_DICTIONARY = {
   token: "token",
@@ -10,9 +11,22 @@ const TOKEN_DICTIONARY = {
 const filePath = join(homedir(), "weather.data.json");
 
 const writeKey = async (type, value) => {
+  if ((type = TOKEN_DICTIONARY.city)) {
+    const { data } = await axios.get(
+      "https://api.openweathermap.org/data/2.5/weather",
+      {
+        params: {
+          q: value,
+        },
+      }
+    );
+    console.log(data);
+  }
+
   if (await isExist()) {
     await getKey();
   }
+
   const data = await getKey();
   data[type] = value;
   await promises.writeFile(filePath, JSON.stringify(data));
