@@ -5,9 +5,8 @@ const getWeather = async () => {
   const { token, city } = await getKey();
 
   // console.log(token, city);
-
   if (!(token && city)) {
-    return false;
+    return new Error("city or token is not defined");
   }
 
   const { data } = await axios.get(
@@ -21,6 +20,7 @@ const getWeather = async () => {
       },
     }
   );
+  // console.log(data);
   return data;
 };
 

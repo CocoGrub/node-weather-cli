@@ -20,10 +20,13 @@ const printHelp = () => {
 
 const printWeather = ({ name, weather, main, wind }) => {
   console.log(dedent`
-  city: ${chalk.bgMagenta(name)}
-  status: ${chalk.bgRed(weather[0].description)}
-  temperature: ${chalk.bgGrey(main.temp)}
-  wind speed: ${chalk.yellowBright(wind.speed)}
+  ${chalk.bgMagenta("WEATHER")}
+  city: ${name}
+  status: ${weather[0].description}
+  temperature: ${main.temp} c
+  wind speed: ${wind.speed} m/s
+  pressure: ${main.pressure}
+  humidity: ${main.humidity}%
   `);
 };
 

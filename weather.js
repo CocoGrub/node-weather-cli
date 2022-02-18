@@ -46,18 +46,11 @@ const foreCast = async () => {
 async function main() {
   const args = argsLogger(process.argv);
 
-  if (args.h) {
-    printHelp();
-  }
-  if (args.s) {
-    printSucces();
-  }
-  if (args.c) {
-    return saveData(TOKEN_DICTIONARY.city, args.c);
-  }
-  if (args.t) {
-    return saveData(TOKEN_DICTIONARY.token, args.t);
-  }
+  if (args.h) printHelp();
+  if (args.s) printSucces();
+  if (args.c) return saveData(TOKEN_DICTIONARY.city, args.c);
+  if (args.t) return saveData(TOKEN_DICTIONARY.token, args.t);
+
   await foreCast();
 }
 
