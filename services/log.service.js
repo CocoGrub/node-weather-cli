@@ -18,4 +18,13 @@ const printHelp = () => {
   `);
 };
 
-export { logError, printSucces, printHelp };
+const printWeather = ({ name, weather, main, wind }) => {
+  console.log(dedent`
+  city: ${chalk.bgMagenta(name)}
+  status: ${chalk.bgRed(weather[0].description)}
+  temperature: ${chalk.bgGrey(main.temp)}
+  wind speed: ${chalk.yellowBright(wind.speed)}
+  `);
+};
+
+export { logError, printSucces, printHelp, printWeather };

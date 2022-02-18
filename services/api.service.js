@@ -4,7 +4,8 @@ import { getKey } from "./storage.service.js";
 const getWeather = async () => {
   const { token, city } = await getKey();
 
-  console.log(token, city);
+  // console.log(token, city);
+
   if (!(token && city)) {
     return false;
   }
@@ -20,8 +21,6 @@ const getWeather = async () => {
       },
     }
   );
-  console.log(data);
-
   return data;
 };
 
